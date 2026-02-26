@@ -94,23 +94,38 @@ function startCountdown() {
 
 function notify(title, bodyText) {
 
-  // 🔔 Notificación
+  // 🔔 Notificación visual
   if ("Notification" in window && Notification.permission === "granted") {
     new Notification(title, { body: bodyText });
   }
 
-  // 🔊 Sonido
-  if (soundEnabled) {
-    const sound = document.getElementById("alarmSound");
-    if (sound) {
-      sound.currentTime = 0;
-      sound.play().catch(() => {});
+  // 🔊 Voz (Text To Speech)
+  if (soundEnabled && "speechSynthesis" in window) {
+
+        const firstPart = new SpeechSynthesisUtterance("Hello!, it's time.");
+        firstPart.lang = "en-US";
+        firstPart.rate = 0.90;
+        firstPart.pitch = 1.1;
+
+        const secondPart = new SpeechSynthesisUtterance("Toma un poco de agua.");
+        secondPart.lang = "en-Us";
+        secondPart.rate = 0.90;
+        secondPart.pitch = 1.1;
+
+        // Cuando termine la primera frase
+        firstPart.onend = () => {
+            setTimeout(() => {
+            speechSynthesis.speak(secondPart);
+            }, 100); // pausa real
+        };
+
+        speechSynthesis.cancel(); // limpia cola anterior
+        speechSynthesis.speak(firstPart);
     }
-  }
 
   // 📳 Vibración
   if (vibrationEnabled && navigator.vibrate) {
-    navigator.vibrate([200, 100, 200]);
+    navigator.vibrate([200, 100, 200,200, 100, 200]);
   }
 }
 
