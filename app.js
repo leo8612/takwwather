@@ -124,9 +124,12 @@ function notify(title, bodyText) {
     }
 
   // 📳 Vibración
-  if (vibrationEnabled && navigator.vibrate) {
-    navigator.vibrate([200, 100, 200,200, 100, 200]);
-  }
+    navigator.vibrate([
+        1000, 300,
+        1000, 300,
+        1000, 300,
+        1000
+    ]);
 }
 
 function renderHistory() {
